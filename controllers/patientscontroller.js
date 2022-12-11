@@ -37,19 +37,13 @@ router.get("/", auth, async (req, res) => {
     });
 });
 
-router.get("/images/:accession", auth, async (req, res) => {
-  const accession = req.params.accession;
-  console.log(
-    `${
-      req.username
-    } searching patient with accession: ${accession} at ${new Date()}`
-  );
+router.post("/images", auth, async (req, res) => {
+  const dicomFile = req.body;
 
   http
-    .get(`/patients/images/${accession}`)
+    .post("/patients/images", dicomFile)
     .then((response) => {
-      const image = response.data;
-      res.status(200).send(image);
+      res.status(200).send(response.data);
     })
     .catch((err) => {
       console.log(err);
